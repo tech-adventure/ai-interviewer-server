@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/backend
+      - .:/backend      
     environment:
       - UVICORN_HOST=0.0.0.0
       - UVICORN_PORT=8000
