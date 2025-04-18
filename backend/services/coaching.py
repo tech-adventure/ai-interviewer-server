@@ -18,4 +18,5 @@ class CoachingService:
             CoachingResponse: The coaching session results
         """
         result = run_coaching_session(coach_name, skill_area, experience_level, improvement_goal)
+        # The result already contains the CrewOutput object
         return CoachingResponse(coaching_result=result["coaching_result"]) 

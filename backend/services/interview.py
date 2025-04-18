@@ -17,4 +17,5 @@ class InterviewService:
             InterviewResponse: The interview results
         """
         result = run_mock_interview(interviewer_name, role, job_description)
+        # The result already contains the CrewOutput object
         return InterviewResponse(interview_result=result["interview_result"]) 

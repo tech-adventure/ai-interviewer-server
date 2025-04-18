@@ -58,6 +58,8 @@ def run_mock_interview(interviewer_name: str, role: str, job_description: str):
     
     # Run the interview:
     result = crew.kickoff()
+    
+    # We return the CrewOutput object directly
     return {"interview_result": result}
 
     

@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Any, Dict, Optional
 
 class CoachingRequest(BaseModel):
     coach_name: str = "Alex"
@@ -17,4 +18,14 @@ class CoachingRequest(BaseModel):
         }
 
 class CoachingResponse(BaseModel):
-    coaching_result: str 
+    coaching_result: Any
+    
+    class Config:
+        arbitrary_types_allowed = True
+        
+    def dict(self, *args, **kwargs):
+        result = super().dict(*args, **kwargs)
+        # Convert the CrewOutput to a string representation if needed
+        if hasattr(result['coaching_result'], 'raw'):
+            result['coaching_result'] = result['coaching_result'].raw
+        return result 

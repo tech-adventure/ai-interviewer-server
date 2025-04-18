@@ -67,4 +67,6 @@ def run_coaching_session(coach_name: str, skill_area: str, experience_level: str
     
     # Run the coaching session:
     result = crew.kickoff()
+    
+    # We return the CrewOutput object directly
     return {"coaching_result": result} 
