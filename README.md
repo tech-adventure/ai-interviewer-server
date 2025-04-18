@@ -1,13 +1,14 @@
-# AI Interviewer Server
+# AI Interview Preparation API
 
-A FastAPI-based server for conducting mock interviews powered by AI. This application uses the CrewAI framework along with OpenAI's language models to simulate a technical interviewer who can ask questions and evaluate responses.
+A FastAPI-based server for AI-powered interview preparation. This application uses the CrewAI framework along with OpenAI's language models to provide mock interviews and personalized coaching for technical roles.
 
 ## Features
 
 - 🤖 AI-powered mock interviews for technical roles
-- 🎭 Custom interviewer personas
+- 👨‍🏫 Personalized coaching sessions with tailored advice
+- 🎭 Custom interviewer and coach personas
 - 📋 Tailored questions based on job descriptions
-- 📊 Detailed feedback and evaluation
+- 📊 Detailed feedback and improvement plans
 - 🔄 Simple REST API for easy integration
 
 ## Getting Started
@@ -34,8 +35,14 @@ A FastAPI-based server for conducting mock interviews powered by AI. This applic
    ```
    OPENAI_API_KEY=your_api_key_here
    ```
+   
+   Alternatively, the application will prompt you for the API key at startup if it's not found.
 
 ### Running the server
+
+```bash
+uvicorn backend.main:app --reload
+```
 
 The API will be available at http://localhost:8000
 
@@ -78,27 +85,69 @@ curl -X 'POST' \
 }'
 ```
 
+### Coaching Endpoints
+
+#### GET /coaching
+
+Get personalized coaching using query parameters:
+
+```
+GET /coaching?coach_name=Alex&skill_area=Algorithms&experience_level=Intermediate&improvement_goal=Improve%20problem-solving
+```
+
+#### POST /coaching
+
+Get personalized coaching using a JSON body:
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8000/coaching/' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "coach_name": "Taylor",
+  "skill_area": "System Design",
+  "experience_level": "Advanced",
+  "improvement_goal": "Learn how to design scalable distributed systems for interview questions"
+}'
+```
+
 ## Project Structure
 
 ```
 backend/
 ├── __init__.py
 ├── main.py                   # Main application file
+├── config.py                 # Configuration and API key management
 ├── crew/                     # AI crew implementation
 │   ├── __init__.py
-│   └── mock_interview.py     # Interview simulation logic
+│   ├── mock_interview.py     # Interview simulation logic
+│   └── coach.py              # Coaching session logic
 ├── models/                   # Database models (for future use)
 │   └── __init__.py
 ├── schemas/                  # Pydantic models
 │   ├── __init__.py
-│   └── interview.py          # Request/response schemas
+│   ├── interview.py          # Interview request/response schemas
+│   └── coaching.py           # Coaching request/response schemas
 ├── routers/                  # API routes
 │   ├── __init__.py
-│   └── interview.py          # Interview endpoints
+│   ├── interview.py          # Interview endpoints
+│   └── coaching.py           # Coaching endpoints
 └── services/                 # Business logic
     ├── __init__.py
-    └── interview.py          # Interview service
+    ├── interview.py          # Interview service
+    └── coaching.py           # Coaching service
 ```
+
+## Architecture
+
+The application follows a clean, modular architecture:
+
+1. **API Layer** - FastAPI routes and endpoints
+2. **Service Layer** - Business logic and orchestration
+3. **Schema Layer** - Request/response data validation
+4. **Agent Layer** - AI implementation with CrewAI
+
+API keys are managed centrally through the config module, which initializes once at application startup.
 
 ## Technology Stack
 
@@ -106,6 +155,7 @@ backend/
 - **CrewAI**: Framework for orchestrating role-playing AI agents
 - **LangChain**: Framework for building applications with LLMs
 - **OpenAI**: Provides the GPT models for interview simulation
+- **Pydantic**: Data validation and settings management
 - **Docker**: For containerization and easy deployment
 
 ## Development
