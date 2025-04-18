@@ -1,32 +1,6 @@
 import os
-import sys
-from dotenv import load_dotenv
-
 from crewai import Agent, Task, Crew
-from langchain_openai import ChatOpenAI
-
-# Load environment variables from .env file:
-load_dotenv()
-
-# Get OpenAI API key:
-openai_api_key = os.environ.get("OPENAI_API_KEY")
-if not openai_api_key:
-    print("OPENAI_API_KEY not found in environment variables.")
-    print("Please enter your OpenAI API key: ", end='')
-    openai_api_key = input().strip()
-    
-    if not openai_api_key:
-        print("No API key provided. Exiting...")
-        sys.exit(1)
-    else:
-        os.environ["OPENAI_API_KEY"] = openai_api_key
-
-# Initialize the LLM:
-try:
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.5, api_key=openai_api_key)
-except Exception as e:
-    print(f"ERROR initializing ChatOpenAI: {e}")
-    sys.exit(1)
+from backend.config import get_llm
 
 def run_mock_interview(interviewer_name: str, role: str, job_description: str):
     """
@@ -41,6 +15,9 @@ def run_mock_interview(interviewer_name: str, role: str, job_description: str):
         dict: Results of the interview
     """
     print(f"Starting mock interview with {interviewer_name} for {role} role")
+    
+    # Get the LLM from the centralized config
+    llm = get_llm()
     
     # Create a more detailed interviewer agent:
     interviewer = Agent(
